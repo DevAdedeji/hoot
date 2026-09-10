@@ -60,13 +60,38 @@ async function submit(event: FormSubmitEvent<Schema>) {
     <h1
       class="text-[clamp(1.9rem,2.8vw,2.5rem)] leading-[1.15] font-[750] tracking-tighter max-[761px]:text-[2.3rem]"
     >
-      Forgot your password?
+      {{ isComplete ? 'Check your inbox.' : 'Forgot your password?' }}
     </h1>
     <template v-if="isComplete">
-      <p class="mt-3.5 text-[15px] leading-[1.7] text-muted">
-        If an account uses that address, a reset link is on its way. Check your inbox and spam
-        folder.
-      </p>
+      <div
+        role="status"
+        aria-live="polite"
+        class="mt-7 overflow-hidden rounded-2xl border border-primary/40 bg-primary/10"
+      >
+        <div class="flex items-center gap-4 border-b border-primary/20 px-5 py-5">
+          <span
+            class="grid size-12 shrink-0 place-items-center rounded-full bg-primary text-[#20140e] shadow-lg shadow-primary/20"
+          >
+            <UIcon
+              name="i-lucide-mail-check"
+              class="size-6"
+            />
+          </span>
+          <div class="min-w-0">
+            <p class="text-[11px] font-bold tracking-[.14em] text-primary">RESET LINK SENT</p>
+            <p class="mt-1 truncate text-sm font-semibold text-highlighted">{{ state.email }}</p>
+          </div>
+        </div>
+        <div class="px-5 py-5">
+          <p class="text-sm leading-6 text-toned">
+            If an account uses this address, the email will arrive shortly. Open the link within one
+            hour to choose a new password.
+          </p>
+          <p class="mt-3 text-xs leading-5 text-muted">
+            Can’t find it? Check your spam folder or try another email address.
+          </p>
+        </div>
+      </div>
       <UButton
         to="/login"
         block
@@ -75,6 +100,15 @@ async function submit(event: FormSubmitEvent<Schema>) {
         class="mt-8 min-h-12.25 rounded-[9px] text-[15px] font-bold text-[#20140e]"
       >
         Back to log in
+      </UButton>
+      <UButton
+        block
+        color="neutral"
+        variant="ghost"
+        class="mt-2"
+        @click="isComplete = false"
+      >
+        Try another email
       </UButton>
     </template>
 

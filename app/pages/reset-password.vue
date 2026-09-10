@@ -32,6 +32,7 @@ type Schema = z.output<typeof schema>
 
 const state = reactive<Schema>({ password: '', confirmPassword: '' })
 const showPassword = ref(false)
+const showConfirmPassword = ref(false)
 const isSubmitting = ref(false)
 const submitError = ref('')
 
@@ -150,13 +151,28 @@ async function submit(event: FormSubmitEvent<Schema>) {
         >
           <UInput
             v-model="state.confirmPassword"
-            :type="showPassword ? 'text' : 'password'"
+            :type="showConfirmPassword ? 'text' : 'password'"
             placeholder="Enter it again"
             autocomplete="new-password"
             :maxlength="200"
             size="xl"
             class="w-full"
-          />
+          >
+            <template #trailing>
+              <UButton
+                color="neutral"
+                variant="link"
+                size="sm"
+                :icon="showConfirmPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                :aria-label="
+                  showConfirmPassword ? 'Hide confirmed password' : 'Show confirmed password'
+                "
+                :aria-pressed="showConfirmPassword"
+                type="button"
+                @click="showConfirmPassword = !showConfirmPassword"
+              />
+            </template>
+          </UInput>
         </UFormField>
 
         <UButton

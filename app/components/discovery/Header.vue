@@ -1,13 +1,56 @@
 <script setup lang="ts">
+import type { DropdownMenuItem } from '@nuxt/ui'
 import { authClient } from '~/lib/auth-client'
 
 const sessionState = authClient.useSession()
 const session = computed(() => sessionState.value.data)
 const isPending = computed(() => sessionState.value.isPending)
+const isSigningOut = ref(false)
+const initials = computed(() =>
+  session.value?.user.name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase()
+)
+const firstName = computed(() => session.value?.user.name.split(/\s+/)[0])
+
+const accountMenuItems = computed<DropdownMenuItem[][]>(() => [
+  [
+    {
+      label: 'Account',
+      description: 'Profile and account details',
+      icon: 'i-lucide-circle-user-round',
+      to: '/account'
+    },
+    {
+      label: 'Security',
+      description: 'Password and active session',
+      icon: 'i-lucide-shield-check',
+      to: '/account#security'
+    }
+  ],
+  [
+    {
+      label: 'Log out',
+      icon: 'i-lucide-log-out',
+      color: 'error',
+      loading: isSigningOut.value,
+      onSelect: signOut
+    }
+  ]
+])
 
 async function signOut() {
-  await authClient.signOut()
-  await navigateTo('/')
+  isSigningOut.value = true
+
+  try {
+    await authClient.signOut()
+    await navigateTo('/')
+  } finally {
+    isSigningOut.value = false
+  }
 }
 </script>
 
@@ -67,20 +110,43 @@ async function signOut() {
         class="hidden max-[640px]:inline-flex"
       />
       <template v-if="session?.user">
-        <UButton
-          to="/account"
-          color="neutral"
-          variant="ghost"
-          icon="i-lucide-circle-user-round"
-          >{{ session.user.name }}</UButton
+        <UDropdownMenu
+          :items="accountMenuItems"
+          :content="{ align: 'end', sideOffset: 10 }"
+          :ui="{
+            content: 'w-70 rounded-xl border border-white/10 bg-[#17181d] p-1.5 shadow-2xl',
+            item: 'rounded-lg px-3 py-2.5',
+            itemLeadingIcon: 'mt-0.5 self-start',
+            itemLabel: 'leading-5',
+            itemDescription: 'mt-0.5 text-xs leading-4 text-muted'
+          }"
         >
-        <UButton
-          color="neutral"
-          variant="soft"
-          icon="i-lucide-log-out"
-          aria-label="Log out"
-          @click="signOut"
-        />
+          <UButton
+            color="neutral"
+            variant="ghost"
+            class="gap-2 rounded-xl px-2 py-1.5"
+            aria-label="Open account menu"
+          >
+            <span
+              class="grid size-8 shrink-0 place-items-center rounded-full bg-primary/15 text-xs font-bold text-primary"
+              >{{ initials }}</span
+            >
+            <span class="max-w-24 truncate text-sm font-semibold max-[480px]:hidden">{{
+              firstName
+            }}</span>
+            <UIcon
+              name="i-lucide-chevron-down"
+              class="size-4 text-muted max-[480px]:hidden"
+            />
+          </UButton>
+
+          <template #content-top>
+            <div class="border-b border-white/8 px-3 py-3">
+              <p class="truncate text-sm font-semibold text-highlighted">{{ session.user.name }}</p>
+              <p class="mt-0.5 truncate text-xs text-muted">{{ session.user.email }}</p>
+            </div>
+          </template>
+        </UDropdownMenu>
       </template>
       <template v-else>
         <UButton

@@ -55,7 +55,10 @@ async function signOut() {
         <h1 class="mt-2 text-3xl font-bold tracking-tight">{{ session?.user.name }}</h1>
         <p class="mt-2 text-sm text-muted">{{ session?.user.email }}</p>
 
-        <div class="mt-8 border-t border-white/8 pt-6">
+        <div
+          id="security"
+          class="mt-8 scroll-mt-24 border-t border-white/8 pt-6"
+        >
           <p class="text-sm text-muted">
             You are signed in. This page is protected by a database-backed Hoot session.
           </p>
