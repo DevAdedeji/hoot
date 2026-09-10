@@ -23,6 +23,8 @@ Update `DATABASE_URL` in `.env` if your local PostgreSQL role or connection deta
 
 Google authentication is enabled when both `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set. Use `http://localhost:3000/api/auth/callback/google` as the local authorized redirect URI in Google Cloud.
 
+Authentication email is delivered through Resend. Set `RESEND_API_KEY` and `EMAIL_FROM` to enable email verification and password recovery. The sender domain in `EMAIL_FROM` must be verified in Resend.
+
 ## Database
 
 ```sh
@@ -56,6 +58,6 @@ Use `pnpm format` to format Vue, TypeScript, JSON, Markdown, and stylesheet file
 - `server/utils/`: database and authentication configuration.
 - `nuxt.config.ts`: framework and module configuration.
 
-Current routes include `/` (discovery), `/login`, `/signup`, `/forgot-password`, and the protected `/account` page. Email/password signup, login, logout, and database-backed sessions are implemented. Google authentication is activated through environment credentials.
+Current routes include `/` (discovery), `/login`, `/signup`, `/forgot-password`, `/reset-password`, `/verify-email`, and the protected `/account` page. Email/password signup, email verification, password recovery, login, logout, and database-backed sessions are implemented. Google authentication is activated through environment credentials.
 
 Sample photography is stored locally in `public/images/`.

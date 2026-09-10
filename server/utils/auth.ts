@@ -1,7 +1,10 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import * as schema from '../database/schema'
-import { sendPasswordResetEmail, sendVerificationEmail } from '../services/email'
+import {
+  sendPasswordResetEmail as deliverPasswordResetEmail,
+  sendVerificationEmail as deliverVerificationEmail
+} from '../services/email'
 import { db } from './db'
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID
@@ -41,7 +44,7 @@ export const auth = betterAuth({
     revokeSessionsOnPasswordReset: true,
     resetPasswordTokenExpiresIn: 60 * 60,
     sendResetPassword: async ({ user, url }) => {
-      void sendPasswordResetEmail(user.email, url).catch(() => {
+      void deliverPasswordResetEmail(user.email, url).catch(() => {
         console.error('Failed to send a Hoot password-reset email')
       })
     }
@@ -51,7 +54,7 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     sendOnSignIn: true,
     sendVerificationEmail: async ({ user, url }) => {
-      void sendVerificationEmail(user.email, url).catch(() => {
+      void deliverVerificationEmail(user.email, url).catch(() => {
         console.error('Failed to send a Hoot verification email')
       })
     }

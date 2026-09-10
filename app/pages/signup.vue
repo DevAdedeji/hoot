@@ -43,24 +43,22 @@ function focusError(event: FormErrorEvent): void {
 async function submit(event: FormSubmitEvent<Schema>) {
   submitError.value = ''
   isSubmitting.value = true
+  const verificationCallback = `/verify-email?verified=1&email=${encodeURIComponent(event.data.email)}`
 
   try {
     const { error } = await authClient.signUp.email({
       name: event.data.name,
       email: event.data.email,
       password: event.data.password,
-      callbackURL: '/'
+      callbackURL: verificationCallback
     })
 
     if (error) {
-      submitError.value =
-        error.code === 'USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL'
-          ? 'An account with this email already exists.'
-          : 'We could not create your account. Try again.'
+      submitError.value = 'We could not create your account. Try again.'
       return
     }
 
-    await navigateTo('/')
+    await navigateTo({ path: '/verify-email', query: { email: event.data.email } })
   } catch {
     submitError.value = 'We could not reach Hoot. Try again.'
   } finally {

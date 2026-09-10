@@ -27,6 +27,7 @@ const isSubmitting = ref(false)
 const isGoogleSubmitting = ref(false)
 const submitError = ref('')
 const route = useRoute()
+const passwordWasReset = computed(() => route.query.reset === '1')
 
 const redirectTo = computed(() => {
   const redirect = route.query.redirect
@@ -52,6 +53,11 @@ async function submit(event: FormSubmitEvent<Schema>) {
     })
 
     if (error) {
+      if (error.status === 403) {
+        await navigateTo({ path: '/verify-email', query: { email: event.data.email } })
+        return
+      }
+
       submitError.value = 'We could not log you in with those details.'
       return
     }
@@ -125,6 +131,13 @@ async function continueWithGoogle() {
       class="mb-5 rounded-lg border border-error/25 bg-error/10 px-3.5 py-3 text-sm text-error"
     >
       {{ submitError }}
+    </p>
+    <p
+      v-else-if="passwordWasReset"
+      role="status"
+      class="mb-5 rounded-lg border border-success/25 bg-success/10 px-3.5 py-3 text-sm text-success"
+    >
+      Your password has been updated. Log in with the new one.
     </p>
 
     <UForm

@@ -73,7 +73,8 @@ async function sendAuthEmail({ action, intro, subject, to, url }: AuthEmail) {
 export function sendPasswordResetEmail(to: string, url: string) {
   return sendAuthEmail({
     action: 'Choose a new password',
-    intro: 'Use the button below to choose a new password for your Hoot account. This link expires in one hour.',
+    intro:
+      'Use the button below to choose a new password for your Hoot account. This link expires in one hour.',
     subject: 'Reset your Hoot password',
     to,
     url
@@ -83,7 +84,8 @@ export function sendPasswordResetEmail(to: string, url: string) {
 export function sendVerificationEmail(to: string, url: string) {
   return sendAuthEmail({
     action: 'Verify my email',
-    intro: 'Confirm that this email address belongs to you before you start using your Hoot account.',
+    intro:
+      'Confirm that this email address belongs to you before you start using your Hoot account.',
     subject: 'Verify your Hoot email',
     to,
     url
