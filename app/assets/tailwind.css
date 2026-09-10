@@ -1,0 +1,7 @@
+@import '@fontsource-variable/dm-sans';
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+@theme {
+  --font-sans: 'DM Sans Variable', sans-serif;
+}
