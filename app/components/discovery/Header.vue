@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import { authClient } from '~/lib/auth-client'
+
+const sessionState = authClient.useSession()
+const session = computed(() => sessionState.value.data)
+const isPending = computed(() => sessionState.value.isPending)
+
+async function signOut() {
+  await authClient.signOut()
+  await navigateTo('/')
+}
+</script>
+
 <template>
   <header
     class="sticky top-0 z-50 flex h-17 items-center gap-5 border-b border-white/[0.07] bg-[#0d0e11]/90 px-5 backdrop-blur-xl max-[640px]:gap-3 max-[640px]:px-4"
@@ -53,17 +66,36 @@
         aria-label="Search Hoot"
         class="hidden max-[640px]:inline-flex"
       />
-      <UButton
-        to="/login"
-        color="neutral"
-        variant="ghost"
-        >Log in</UButton
-      >
-      <UButton
-        to="/signup"
-        class="font-bold text-[#1c110c]"
-        >Join Hoot</UButton
-      >
+      <template v-if="session?.user">
+        <UButton
+          to="/account"
+          color="neutral"
+          variant="ghost"
+          icon="i-lucide-circle-user-round"
+          >{{ session.user.name }}</UButton
+        >
+        <UButton
+          color="neutral"
+          variant="soft"
+          icon="i-lucide-log-out"
+          aria-label="Log out"
+          @click="signOut"
+        />
+      </template>
+      <template v-else>
+        <UButton
+          to="/login"
+          color="neutral"
+          variant="ghost"
+          :loading="isPending"
+          >Log in</UButton
+        >
+        <UButton
+          to="/signup"
+          class="font-bold text-[#1c110c]"
+          >Join Hoot</UButton
+        >
+      </template>
     </div>
   </header>
 </template>

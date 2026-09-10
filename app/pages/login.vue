@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type { FormErrorEvent } from '@nuxt/ui'
+import type { FormErrorEvent, FormSubmitEvent } from '@nuxt/ui'
 import { z } from 'zod'
+import { authClient } from '~/lib/auth-client'
 
 definePageMeta({ layout: 'auth' })
 
@@ -22,10 +23,65 @@ type Schema = z.output<typeof schema>
 
 const state = reactive<Schema>({ email: '', password: '' })
 const showPassword = ref(false)
+const isSubmitting = ref(false)
+const isGoogleSubmitting = ref(false)
+const submitError = ref('')
+const route = useRoute()
+
+const redirectTo = computed(() => {
+  const redirect = route.query.redirect
+  return typeof redirect === 'string' && redirect.startsWith('/') && !redirect.startsWith('//')
+    ? redirect
+    : '/'
+})
 
 function focusError(event: FormErrorEvent): void {
   const id = event.errors[0]?.id
   if (id) document.getElementById(id)?.focus()
+}
+
+async function submit(event: FormSubmitEvent<Schema>) {
+  submitError.value = ''
+  isSubmitting.value = true
+
+  try {
+    const { error } = await authClient.signIn.email({
+      email: event.data.email,
+      password: event.data.password,
+      callbackURL: redirectTo.value
+    })
+
+    if (error) {
+      submitError.value = 'We could not log you in with those details.'
+      return
+    }
+
+    await navigateTo(redirectTo.value)
+  } catch {
+    submitError.value = 'We could not reach Hoot. Try again.'
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+async function continueWithGoogle() {
+  submitError.value = ''
+  isGoogleSubmitting.value = true
+
+  try {
+    const { error } = await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: redirectTo.value
+    })
+
+    if (error) {
+      submitError.value = 'Google sign-in is unavailable right now.'
+    }
+  } catch {
+    submitError.value = 'We could not reach Google sign-in. Try again.'
+  } finally {
+    isGoogleSubmitting.value = false
+  }
 }
 </script>
 
@@ -47,9 +103,12 @@ function focusError(event: FormErrorEvent): void {
         color="neutral"
         variant="solid"
         size="xl"
+        type="button"
+        :loading="isGoogleSubmitting"
         class="min-h-12.25 gap-3 rounded-[9px] border border-white bg-[#f2f2f4] text-sm font-[650] text-[#242529] hover:bg-[#dcdce0]"
         leading-icon="i-simple-icons-google"
         :ui="{ leadingIcon: 'size-[18px]' }"
+        @click="continueWithGoogle"
       >
         Continue with Google
       </UButton>
@@ -60,12 +119,21 @@ function focusError(event: FormErrorEvent): void {
       />
     </div>
 
+    <p
+      v-if="submitError"
+      role="alert"
+      class="mb-5 rounded-lg border border-error/25 bg-error/10 px-3.5 py-3 text-sm text-error"
+    >
+      {{ submitError }}
+    </p>
+
     <UForm
       :schema="schema"
       :state="state"
       :validate-on="['blur', 'change']"
       class="flex flex-col gap-5.25"
       @error="focusError"
+      @submit="submit"
     >
       <UFormField
         label="Email address"
@@ -122,6 +190,7 @@ function focusError(event: FormErrorEvent): void {
         type="submit"
         block
         size="xl"
+        :loading="isSubmitting"
         trailing-icon="i-lucide-arrow-right"
         class="mt-1 min-h-12.25 rounded-[9px] text-[15px] font-bold text-[#20140e]"
       >
