@@ -6,6 +6,29 @@ const sessionState = authClient.useSession()
 const session = computed(() => sessionState.value.data)
 const isPending = computed(() => sessionState.value.isPending)
 const isSigningOut = ref(false)
+const ownChannel = ref<{ handle: string } | null>(null)
+let channelRequest = 0
+
+watch(
+  () => session.value?.user.id,
+  async (userId) => {
+    const request = ++channelRequest
+
+    if (!userId) {
+      ownChannel.value = null
+      return
+    }
+
+    try {
+      const response = await $fetch('/api/channels/me')
+      if (request === channelRequest) ownChannel.value = response.channel
+    } catch {
+      if (request === channelRequest) ownChannel.value = null
+    }
+  },
+  { immediate: true }
+)
+
 const initials = computed(() =>
   session.value?.user.name
     .split(/\s+/)
@@ -16,31 +39,64 @@ const initials = computed(() =>
 )
 const firstName = computed(() => session.value?.user.name.split(/\s+/)[0])
 
-const accountMenuItems = computed<DropdownMenuItem[][]>(() => [
-  [
-    {
-      label: 'Account',
-      description: 'Profile and account details',
-      icon: 'i-lucide-circle-user-round',
-      to: '/account'
-    },
-    {
-      label: 'Security',
-      description: 'Password and active session',
-      icon: 'i-lucide-shield-check',
-      to: '/account#security'
-    }
-  ],
-  [
-    {
-      label: 'Log out',
-      icon: 'i-lucide-log-out',
-      color: 'error',
-      loading: isSigningOut.value,
-      onSelect: signOut
-    }
+const accountMenuItems = computed<DropdownMenuItem[][]>(() => {
+  const channelItems: DropdownMenuItem[] = ownChannel.value
+    ? [
+        {
+          label: 'Your channel',
+          description: `@${ownChannel.value.handle} on Hoot`,
+          icon: 'i-lucide-radio-tower',
+          to: `/${ownChannel.value.handle}`
+        },
+        {
+          label: 'Channel settings',
+          description: 'Edit your handle, name, and bio',
+          icon: 'i-lucide-settings-2',
+          to: '/account/channel'
+        }
+      ]
+    : [
+        {
+          label: 'Create your channel',
+          description: 'Set up your public space',
+          icon: 'i-lucide-circle-plus',
+          to: '/creator/onboarding'
+        }
+      ]
+
+  return [
+    channelItems,
+    [
+      {
+        label: 'Account',
+        description: 'Profile and account details',
+        icon: 'i-lucide-circle-user-round',
+        to: '/account'
+      },
+      {
+        label: 'Your interests',
+        description: 'Tune what appears in your feed',
+        icon: 'i-lucide-sliders-horizontal',
+        to: '/account#interests'
+      },
+      {
+        label: 'Security',
+        description: 'Password and active session',
+        icon: 'i-lucide-shield-check',
+        to: '/account#security'
+      }
+    ],
+    [
+      {
+        label: 'Log out',
+        icon: 'i-lucide-log-out',
+        color: 'error',
+        loading: isSigningOut.value,
+        onSelect: signOut
+      }
+    ]
   ]
-])
+})
 
 async function signOut() {
   isSigningOut.value = true

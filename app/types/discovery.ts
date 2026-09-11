@@ -1,3 +1,5 @@
+import type { ContentCategory } from '#shared/content'
+
 export interface StreamPreview {
   creator: string
   initials: string
@@ -6,6 +8,7 @@ export interface StreamPreview {
   viewers: string
   image: string
   avatar: string
+  interest: ContentCategory
 }
 
 export interface FeaturedStream extends StreamPreview {
@@ -16,6 +19,7 @@ export interface StreamCategory {
   name: string
   viewers: string
   icon: string
-  gradient: string
+  interest: ContentCategory
+  surface: string
   color: string
 }

@@ -16,6 +16,7 @@ const hasInvalidToken = computed(() => Boolean(route.query.error))
 const isSubmitting = ref(false)
 const submitError = ref('')
 const hasResent = ref(false)
+const usesLocalEmailPreview = import.meta.dev
 
 const verificationCallback = computed(
   () => `/verify-email?verified=1&email=${encodeURIComponent(email.value)}`
@@ -57,16 +58,16 @@ async function resendVerification() {
         Email verified.
       </h1>
       <p class="mt-3.5 text-[15px] leading-[1.7] text-muted">
-        Your Hoot account is ready. You can head back to discover.
+        Your Hoot account is ready. Choose a few interests so we can tune your feed.
       </p>
       <UButton
-        to="/"
+        to="/onboarding"
         block
         size="xl"
         trailing-icon="i-lucide-arrow-right"
         class="mt-8 min-h-12.25 rounded-[9px] text-[15px] font-bold text-[#20140e]"
       >
-        Start exploring
+        Continue
       </UButton>
     </template>
 
@@ -78,7 +79,10 @@ async function resendVerification() {
         Verify your email.
       </h1>
       <p class="mt-3.5 text-[15px] leading-[1.7] text-muted">
-        <template v-if="email">
+        <template v-if="usesLocalEmailPreview">
+          Open the verification link printed in your Hoot terminal.
+        </template>
+        <template v-else-if="email">
           If this address still needs verification, a link is on its way to
           <span class="font-semibold text-highlighted">{{ email }}</span
           >.
@@ -98,7 +102,11 @@ async function resendVerification() {
         role="status"
         class="mt-6 rounded-lg border border-success/25 bg-success/10 px-3.5 py-3 text-sm text-success"
       >
-        A new verification link is on its way.
+        {{
+          usesLocalEmailPreview
+            ? 'A new verification link was logged in your terminal.'
+            : 'A new verification link is on its way.'
+        }}
       </p>
       <p
         v-if="submitError"
@@ -117,7 +125,7 @@ async function resendVerification() {
         class="mt-8 min-h-12.25 rounded-[9px] text-[15px] font-bold text-[#20140e]"
         @click="resendVerification"
       >
-        Send another link
+        {{ usesLocalEmailPreview ? 'Generate another link' : 'Send another link' }}
       </UButton>
 
       <p class="mt-6.25 text-center text-sm leading-[1.7] text-muted">

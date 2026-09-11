@@ -73,7 +73,7 @@ async function continueWithGoogle() {
   try {
     const { error } = await authClient.signIn.social({
       provider: 'google',
-      callbackURL: '/'
+      callbackURL: '/onboarding'
     })
 
     if (error) {

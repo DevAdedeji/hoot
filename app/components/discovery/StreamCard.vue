@@ -20,7 +20,7 @@ defineProps<{
         height="800"
         loading="lazy"
       />
-      <div class="absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-transparent" />
+      <div class="absolute inset-0 bg-black/15" />
       <span
         class="absolute top-3 left-3 rounded-md bg-red-500 px-2 py-1 text-[9px] font-bold tracking-[.08em]"
         >LIVE</span

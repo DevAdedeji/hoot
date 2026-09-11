@@ -24,6 +24,7 @@ const state = reactive<Schema>({ email: '' })
 const isSubmitting = ref(false)
 const submitError = ref('')
 const isComplete = ref(false)
+const usesLocalEmailPreview = import.meta.dev
 
 function focusError(event: FormErrorEvent): void {
   const id = event.errors[0]?.id
@@ -60,7 +61,13 @@ async function submit(event: FormSubmitEvent<Schema>) {
     <h1
       class="text-[clamp(1.9rem,2.8vw,2.5rem)] leading-[1.15] font-[750] tracking-tighter max-[761px]:text-[2.3rem]"
     >
-      {{ isComplete ? 'Check your inbox.' : 'Forgot your password?' }}
+      {{
+        isComplete
+          ? usesLocalEmailPreview
+            ? 'Check your terminal.'
+            : 'Check your inbox.'
+          : 'Forgot your password?'
+      }}
     </h1>
     <template v-if="isComplete">
       <div
@@ -78,16 +85,24 @@ async function submit(event: FormSubmitEvent<Schema>) {
             />
           </span>
           <div class="min-w-0">
-            <p class="text-[11px] font-bold tracking-[.14em] text-primary">RESET LINK SENT</p>
+            <p class="text-[11px] font-bold tracking-[.14em] text-primary">
+              {{ usesLocalEmailPreview ? 'RESET LINK GENERATED' : 'RESET LINK SENT' }}
+            </p>
             <p class="mt-1 truncate text-sm font-semibold text-highlighted">{{ state.email }}</p>
           </div>
         </div>
         <div class="px-5 py-5">
           <p class="text-sm leading-6 text-toned">
-            If an account uses this address, the email will arrive shortly. Open the link within one
-            hour to choose a new password.
+            {{
+              usesLocalEmailPreview
+                ? 'If an account uses this address, its reset link was logged in your Hoot terminal. Open it within one hour to choose a new password.'
+                : 'If an account uses this address, the email will arrive shortly. Open the link within one hour to choose a new password.'
+            }}
           </p>
-          <p class="mt-3 text-xs leading-5 text-muted">
+          <p
+            v-if="!usesLocalEmailPreview"
+            class="mt-3 text-xs leading-5 text-muted"
+          >
             Can’t find it? Check your spam folder or try another email address.
           </p>
         </div>

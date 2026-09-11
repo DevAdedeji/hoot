@@ -20,6 +20,11 @@ export default defineAppConfig({
         base: 'min-h-[49px] rounded-[9px] bg-[#17181d] text-sm placeholder:text-[#9094a0] focus-visible:ring-0'
       }
     },
+    textarea: {
+      slots: {
+        base: 'rounded-[9px] bg-[#17181d] text-sm placeholder:text-[#9094a0] focus-visible:ring-0'
+      }
+    },
     colors: {
       primary: 'orange',
       neutral: 'zinc'

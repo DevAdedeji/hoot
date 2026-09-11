@@ -1,5 +1,17 @@
 import { relations } from 'drizzle-orm'
-import { pgTable, text, timestamp, boolean, index } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, boolean, index, pgEnum } from 'drizzle-orm/pg-core'
+import { contentCategoryValues } from '../../shared/content'
+
+export const avatarThemeEnum = pgEnum('avatar_theme', [
+  'orange',
+  'gold',
+  'rose',
+  'violet',
+  'blue',
+  'mint'
+])
+
+export const contentCategoryEnum = pgEnum('content_category', contentCategoryValues)
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
@@ -7,6 +19,8 @@ export const user = pgTable('user', {
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').default(false).notNull(),
   image: text('image'),
+  interests: contentCategoryEnum('interests').array().default([]).notNull(),
+  onboardingCompleted: boolean('onboarding_completed').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .defaultNow()
@@ -73,9 +87,30 @@ export const verification = pgTable(
   (table) => [index('verification_identifier_idx').on(table.identifier)]
 )
 
-export const userRelations = relations(user, ({ many }) => ({
+export const channel = pgTable('channel', {
+  id: text('id').primaryKey(),
+  ownerId: text('owner_id')
+    .notNull()
+    .unique()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  handle: text('handle').notNull().unique(),
+  displayName: text('display_name').notNull(),
+  bio: text('bio').default('').notNull(),
+  avatarTheme: avatarThemeEnum('avatar_theme').default('orange').notNull(),
+  topics: contentCategoryEnum('topics').array().default([]).notNull(),
+  avatarUrl: text('avatar_url'),
+  bannerUrl: text('banner_url'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull()
+})
+
+export const userRelations = relations(user, ({ many, one }) => ({
   sessions: many(session),
-  accounts: many(account)
+  accounts: many(account),
+  channel: one(channel)
 }))
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -88,6 +123,13 @@ export const sessionRelations = relations(session, ({ one }) => ({
 export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
+    references: [user.id]
+  })
+}))
+
+export const channelRelations = relations(channel, ({ one }) => ({
+  owner: one(user, {
+    fields: [channel.ownerId],
     references: [user.id]
   })
 }))

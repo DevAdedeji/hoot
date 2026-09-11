@@ -58,7 +58,7 @@ const activeStream = computed(() => props.streams[activeIndex.value] ?? props.st
           width="1400"
           height="934"
         />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-black/20" />
+        <div class="absolute inset-0 bg-black/25" />
         <span
           class="absolute top-5 left-5 flex items-center gap-2 rounded-lg bg-red-500 px-3 py-1.5 text-[10px] font-bold tracking-[.1em] text-white"
         >

@@ -23,15 +23,15 @@ export default defineNuxtConfig({
     fonts: false
   },
 
-  routeRules: {
-    '/': { prerender: true }
-  },
-
   compatibilityDate: '2026-06-30',
 
   icon: {
     clientBundle: {
       scan: true
     }
+  },
+
+  nitro: {
+    serverAssets: [{ baseName: 'email', dir: './server/assets' }]
   }
 })

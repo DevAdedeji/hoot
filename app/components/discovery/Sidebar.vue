@@ -3,6 +3,8 @@ import type { StreamPreview } from '~/types/discovery'
 
 defineProps<{
   channels: StreamPreview[]
+  isAuthenticated: boolean
+  onboardingCompleted: boolean
 }>()
 </script>
 
@@ -73,21 +75,54 @@ defineProps<{
       </NuxtLink>
     </div>
 
-    <div class="mt-7 rounded-2xl border border-primary/15 bg-primary/6 p-4">
+    <div
+      class="mt-7 rounded-2xl border p-4"
+      :class="
+        isAuthenticated && !onboardingCompleted
+          ? 'border-primary/35 bg-primary/10'
+          : 'border-white/10 bg-white/[0.035]'
+      "
+    >
       <UIcon
-        name="i-lucide-sparkles"
-        class="text-orange-300"
+        :name="
+          isAuthenticated && !onboardingCompleted
+            ? 'i-lucide-list-checks'
+            : 'i-lucide-sliders-horizontal'
+        "
+        :class="isAuthenticated && !onboardingCompleted ? 'text-primary' : 'text-orange-300'"
       />
-      <p class="mt-3 text-xs font-semibold">Make this feed yours.</p>
+      <p class="mt-3 text-xs font-semibold">
+        {{
+          !isAuthenticated
+            ? 'Make this feed yours.'
+            : onboardingCompleted
+              ? 'Fine-tune your feed.'
+              : 'Your feed is not tuned yet.'
+        }}
+      </p>
       <p class="mt-1.5 text-[11px] leading-5 text-muted">
-        Follow creators and Hoot will learn what feels like home.
+        {{
+          !isAuthenticated
+            ? 'Follow creators and Hoot will learn what feels like home.'
+            : onboardingCompleted
+              ? 'Update your interests whenever your mood changes.'
+              : 'Pick a few interests so Hoot can put better streams first.'
+        }}
       </p>
       <UButton
-        to="/signup"
+        :to="
+          !isAuthenticated ? '/signup' : onboardingCompleted ? '/account#interests' : '/onboarding'
+        "
         size="sm"
         block
         class="mt-4 font-bold text-[#1c110c]"
-        >Create account</UButton
+        >{{
+          !isAuthenticated
+            ? 'Create account'
+            : onboardingCompleted
+              ? 'Manage interests'
+              : 'Finish setup'
+        }}</UButton
       >
     </div>
   </aside>

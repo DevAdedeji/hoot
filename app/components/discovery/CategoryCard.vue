@@ -12,8 +12,8 @@ defineProps<{
     class="group overflow-hidden rounded-2xl border border-white/[0.07] bg-[#15161b] hover:border-white/[0.14]"
   >
     <div
-      class="grid aspect-5/3 place-items-center bg-linear-to-br"
-      :class="category.gradient"
+      class="grid aspect-5/3 place-items-center"
+      :class="category.surface"
     >
       <UIcon
         :name="category.icon"
