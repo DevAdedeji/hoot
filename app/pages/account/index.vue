@@ -6,8 +6,8 @@ import {
   type ViewerOnboardingInput,
   type ViewerPreferences
 } from '#shared/viewer'
-import { authClient } from '~/lib/auth-client'
-import { contentCategoryOptions } from '~/lib/channel-appearance'
+import { authClient } from '@/lib/auth-client'
+import { contentCategoryOptions } from '@/lib/channel-appearance'
 
 definePageMeta({ middleware: 'auth' })
 

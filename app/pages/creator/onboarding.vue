@@ -11,9 +11,9 @@ import {
   type ChannelIdentityInput,
   type CreateChannelInput
 } from '#shared/channel'
-import Preview from '~/components/channel/Preview.vue'
-import { avatarThemeOptions, contentCategoryOptions } from '~/lib/channel-appearance'
-import { authClient } from '~/lib/auth-client'
+import Preview from '@/components/channel/Preview.vue'
+import { avatarThemeOptions, contentCategoryOptions } from '@/lib/channel-appearance'
+import { authClient } from '@/lib/auth-client'
 
 definePageMeta({ middleware: 'auth' })
 

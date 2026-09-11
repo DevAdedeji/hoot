@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
-import { authClient } from '~/lib/auth-client'
+import { authClient } from '@/lib/auth-client'
 
 const sessionState = authClient.useSession()
 const session = computed(() => sessionState.value.data)

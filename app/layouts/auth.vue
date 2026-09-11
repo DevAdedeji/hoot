@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AuthStory from '~/components/auth/AuthStory.vue'
+import AuthStory from '@/components/auth/AuthStory.vue'
 </script>
 
 <template>

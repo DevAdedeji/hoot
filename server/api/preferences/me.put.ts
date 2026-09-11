@@ -1,6 +1,6 @@
 import { viewerOnboardingSchema } from '#shared/viewer'
-import { completeViewerOnboarding } from '../../services/viewer-preferences'
-import { requireVerifiedSession } from '../../services/session'
+import { completeViewerOnboarding } from '@server/services/viewer-preferences'
+import { requireVerifiedSession } from '@server/services/session'
 
 export default defineEventHandler(async (event) => {
   const session = await requireVerifiedSession(event)

@@ -8,7 +8,7 @@ import {
   type ChannelProfile,
   type UpdateChannelInput
 } from '#shared/channel'
-import { avatarThemeOptions, contentCategoryOptions } from '~/lib/channel-appearance'
+import { avatarThemeOptions, contentCategoryOptions } from '@/lib/channel-appearance'
 
 definePageMeta({ middleware: 'auth' })
 

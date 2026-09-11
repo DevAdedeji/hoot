@@ -1,5 +1,5 @@
-import { getViewerPreferences } from '../../services/viewer-preferences'
-import { requireAuthSession } from '../../services/session'
+import { getViewerPreferences } from '@server/services/viewer-preferences'
+import { requireAuthSession } from '@server/services/session'
 
 export default defineEventHandler(async (event) => {
   const session = await requireAuthSession(event)

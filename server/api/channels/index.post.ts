@@ -1,6 +1,6 @@
 import { createChannelSchema } from '#shared/channel'
-import { createChannelForUser } from '../../services/channels'
-import { requireVerifiedSession } from '../../services/session'
+import { createChannelForUser } from '@server/services/channels'
+import { requireVerifiedSession } from '@server/services/session'
 
 export default defineEventHandler(async (event) => {
   const session = await requireVerifiedSession(event)

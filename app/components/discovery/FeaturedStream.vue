@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FeaturedStream } from '~/types/discovery'
+import type { FeaturedStream } from '@/types/discovery'
 
 const props = defineProps<{
   streams: FeaturedStream[]

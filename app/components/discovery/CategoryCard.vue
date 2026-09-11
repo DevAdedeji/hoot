@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { StreamCategory } from '~/types/discovery'
+import type { StreamCategory } from '@/types/discovery'
 
 defineProps<{
   category: StreamCategory

@@ -1,11 +1,11 @@
 import type { ChannelProfile, CreateChannelInput, UpdateChannelInput } from '#shared/channel'
-import { databaseErrorCode } from '../database/errors'
+import { databaseErrorCode } from '@server/database/errors'
 import {
   findChannelByHandle,
   findChannelByOwnerId,
   insertChannel,
   updateChannel
-} from '../repositories/channels'
+} from '@server/repositories/channels'
 
 function toPublicChannel(
   channel: Awaited<ReturnType<typeof findChannelByHandle>>

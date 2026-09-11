@@ -1,5 +1,8 @@
 import type { ViewerPreferences, ViewerOnboardingInput } from '#shared/viewer'
-import { findViewerPreferences, saveViewerPreferences } from '../repositories/viewer-preferences'
+import {
+  findViewerPreferences,
+  saveViewerPreferences
+} from '@server/repositories/viewer-preferences'
 
 export async function getViewerPreferences(userId: string): Promise<ViewerPreferences> {
   const preferences = await findViewerPreferences(userId)

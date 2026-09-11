@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ChannelProfile } from '#shared/channel'
-import Header from '~/components/discovery/Header.vue'
-import { getAvatarTheme, getContentCategory } from '~/lib/channel-appearance'
+import Header from '@/components/discovery/Header.vue'
+import { getAvatarTheme, getContentCategory } from '@/lib/channel-appearance'
 
 const route = useRoute()
 const handle = computed(() => String(route.params.handle).toLowerCase())

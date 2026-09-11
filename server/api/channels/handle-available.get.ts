@@ -1,6 +1,6 @@
 import { channelAvailabilitySchema } from '#shared/channel'
-import { channelHandleIsAvailable } from '../../services/channels'
-import { getAuthSession } from '../../services/session'
+import { channelHandleIsAvailable } from '@server/services/channels'
+import { getAuthSession } from '@server/services/session'
 
 export default defineEventHandler(async (event) => {
   const parsed = await getValidatedQuery(event, channelAvailabilitySchema.safeParse)

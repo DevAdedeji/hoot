@@ -1,5 +1,5 @@
 import { channelHandleSchema } from '#shared/channel'
-import { getPublicChannel } from '../../services/channels'
+import { getPublicChannel } from '@server/services/channels'
 
 export default defineEventHandler(async (event) => {
   const parsed = channelHandleSchema.safeParse(getRouterParam(event, 'handle'))

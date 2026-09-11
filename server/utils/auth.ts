@@ -1,11 +1,11 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import * as schema from '../database/schema'
+import * as schema from '@server/database/schema'
 import {
   sendPasswordResetEmail as deliverPasswordResetEmail,
   sendVerificationEmail as deliverVerificationEmail
-} from '../services/email'
-import { db } from './db'
+} from '@server/services/email'
+import { db } from '@server/utils/db'
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET

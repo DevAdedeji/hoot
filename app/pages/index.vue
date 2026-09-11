@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import type { ContentCategory } from '#shared/content'
 import type { ViewerPreferences } from '#shared/viewer'
-import CategoryCard from '~/components/discovery/CategoryCard.vue'
-import FeaturedStream from '~/components/discovery/FeaturedStream.vue'
-import Footer from '~/components/discovery/Footer.vue'
-import Header from '~/components/discovery/Header.vue'
-import Sidebar from '~/components/discovery/Sidebar.vue'
-import StreamCard from '~/components/discovery/StreamCard.vue'
-import { authClient } from '~/lib/auth-client'
+import CategoryCard from '@/components/discovery/CategoryCard.vue'
+import FeaturedStream from '@/components/discovery/FeaturedStream.vue'
+import Footer from '@/components/discovery/Footer.vue'
+import Header from '@/components/discovery/Header.vue'
+import Sidebar from '@/components/discovery/Sidebar.vue'
+import StreamCard from '@/components/discovery/StreamCard.vue'
+import { authClient } from '@/lib/auth-client'
 import type {
   FeaturedStream as FeaturedStreamItem,
   StreamCategory,
   StreamPreview
-} from '~/types/discovery'
+} from '@/types/discovery'
 
 useSeoMeta({
   title: 'Discover live — Hoot',

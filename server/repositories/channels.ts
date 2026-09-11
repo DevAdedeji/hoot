@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto'
 import { eq } from 'drizzle-orm'
 import type { CreateChannelInput, UpdateChannelInput } from '#shared/channel'
-import { channel } from '../database/schema'
-import { db } from '../utils/db'
+import { channel } from '@server/database/schema'
+import { db } from '@server/utils/db'
 
 export function findChannelByOwnerId(ownerId: string) {
   return db.query.channel.findFirst({ where: eq(channel.ownerId, ownerId) })

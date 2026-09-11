@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { AvatarTheme } from '#shared/channel'
 import type { ContentCategory } from '#shared/content'
-import { getAvatarTheme, getContentCategory } from '~/lib/channel-appearance'
+import { getAvatarTheme, getContentCategory } from '@/lib/channel-appearance'
 
 const props = defineProps<{
   avatarTheme: AvatarTheme

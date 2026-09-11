@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm'
 import type { ViewerOnboardingInput } from '#shared/viewer'
-import { user } from '../database/schema'
-import { db } from '../utils/db'
+import { user } from '@server/database/schema'
+import { db } from '@server/utils/db'
 
 export function findViewerPreferences(userId: string) {
   return db.query.user.findFirst({

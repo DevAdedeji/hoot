@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import { auth } from '../utils/auth'
+import { auth } from '@server/utils/auth'
 
 export async function getAuthSession(event: H3Event) {
   return auth.api.getSession({ headers: event.headers })

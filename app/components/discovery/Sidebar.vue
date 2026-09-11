@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { StreamPreview } from '~/types/discovery'
+import type { StreamPreview } from '@/types/discovery'
 
 defineProps<{
   channels: StreamPreview[]
